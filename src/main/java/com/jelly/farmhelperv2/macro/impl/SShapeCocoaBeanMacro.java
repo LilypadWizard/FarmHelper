@@ -113,14 +113,16 @@ public class SShapeCocoaBeanMacro extends AbstractMacro {
             case BACKWARD:
                 KeyBindUtils.holdThese(
                         mc.gameSettings.keyBindBack,
-                        mc.gameSettings.keyBindAttack
+                        mc.gameSettings.keyBindAttack,
+                        shouldHugWall() ? mc.gameSettings.keyBindRight : null
+
                 );
                 break;
             case FORWARD:
                 KeyBindUtils.holdThese(
                         mc.gameSettings.keyBindForward,
                         mc.gameSettings.keyBindAttack,
-                        shouldHugWall() ? mc.gameSettings.keyBindLeft : null
+                        shouldHugWall() ? mc.gameSettings.keyBindRight : null
                 );
                 break;
             case SWITCHING_LANE:
@@ -172,33 +174,10 @@ public class SShapeCocoaBeanMacro extends AbstractMacro {
     }
 
     private boolean shouldHugWall() {
-        if (BlockUtils.getRelativeBlock(-1, 0, 0).getMaterial().isSolid() && !BlockUtils.getRelativeBlock(-1, 0, 0).equals(Blocks.air)) {
-            double x = mc.thePlayer.getPositionVector().xCoord % 1;
-            double z = mc.thePlayer.getPositionVector().zCoord % 1;
-            float yaw = AngleUtils.getClosest(mc.thePlayer.rotationYaw);
-            yaw = (yaw % 360 + 360) % 360;
-            if (FarmHelperConfig.getMacro() == FarmHelperConfig.MacroEnum.S_COCOA_BEANS_TRAPDOORS) {
-                if (yaw == 0) {
-                    return (x > -0.9 && x < -0.5) || (x < 0.5 && x > 0.1);
-                } else if (yaw == 90) {
-                    return (z > -0.9 && z < -0.5) || (z < 0.5 && z > 0.1);
-                } else if (yaw == 180) {
-                    return (x > -0.5 && x < -0.1) || (x < 0.9 && x > 0.5);
-                } else if (yaw == 270) {
-                    return (z > -0.5 && z < -0.1) || (z < 0.9 && z > 0.5);
-                }
-            } else {
-                if (yaw == 0) {
-                    return (x > -0.9 && x < -0.35) || (x < 0.65 && x > 0.1);
-                } else if (yaw == 90) {
-                    return (z > -0.9 && z < -0.35) || (z < 0.65 && z > 0.1);
-                } else if (yaw == 180) {
-                    return (x > -0.65 && x < -0.1) || (x < 0.9 && x > 0.35);
-                } else if (yaw == 270) {
-                    return (z > -0.65 && z < -0.1) || (z < 0.9 && z > 0.35);
-                }
-            }
+        if (FarmHelperConfig.getMacro() == FarmHelperConfig.MacroEnum.S_COCOA_BEANS_TRAPDOORS) {
+            return true;
+        } else {
+            return false;
         }
-        return false;
     }
 }
